@@ -1,0 +1,367 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+:root {
+    --above-water-color: #27ae60;
+    --underwater-color: #e74c3c;
+    --mask-color: #3498db;
+    --critical-color: #e74c3c;
+    --warning-color: #f39c12;
+    --good-color: #2ecc71;
+    --neutral-color: #7f8c8d;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    overflow: hidden;
+}
+
+#breath-container {
+    position: absolute;
+    bottom: 20%;
+    right: 2%;
+    width: 300px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+#breath-warning {
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    padding: 15px;
+    color: white;
+    text-align: center;
+    border-left: 4px solid var(--above-water-color);
+    box-shadow: 0 0 15px rgba(39, 174, 96, 0.5);
+    transition: all 0.3s ease;
+}
+
+/* Progress elements */
+.progress-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.progress-circle {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin-bottom: 5px;
+}
+
+.progress-background {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.2);
+    stroke-width: 5;
+}
+
+.progress-bar {
+    fill: none;
+    stroke: var(--above-water-color);
+    stroke-width: 5;
+    stroke-linecap: round;
+    transform-origin: center;
+    transform: rotate(-90deg);
+    transition: stroke-dashoffset 0.3s ease, stroke 0.3s ease, stroke-width 0.3s ease;
+}
+
+.breath-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    color: var(--above-water-color);
+    transition: color 0.3s ease;
+}
+
+.breath-value {
+    font-size: 20px;
+    font-weight: bold;
+    position: absolute;
+    top: 52%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 12px;
+    padding: 3px 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    transition: color 0.3s ease;
+}
+
+.breath-text {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.status-text {
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #e0e0e0;
+    padding: 4px 8px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.breath-multiplier {
+    font-size: 12px;
+    margin-bottom: 10px;
+    color: #f39c12;
+    display: none; /* Hidden by default, shown when there's a multiplier */
+}
+
+.breath-meter {
+    height: 10px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    margin: 10px 0;
+    overflow: hidden;
+}
+
+#breath-level {
+    height: 100%;
+    background-color: var(--above-water-color);
+    width: 30%;
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.breath-hint {
+    font-size: 14px;
+    opacity: 0.8;
+    margin-bottom: 10px;
+}
+
+.breath-hint span {
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-weight: bold;
+}
+
+/* Environmental icons */
+#environmental-icons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+.env-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    opacity: 0.3;
+    transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+
+.env-icon.active {
+    opacity: 1;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.underwater .underwater-icon {
+    opacity: 1;
+    background-color: rgba(231, 76, 60, 0.3);
+    color: var(--underwater-color);
+}
+
+.oxygen-mask .mask-icon {
+    opacity: 1;
+    background-color: rgba(52, 152, 219, 0.3);
+    color: var(--mask-color);
+}
+
+/* State-specific styles */
+.above-water {
+    border-left: 4px solid var(--above-water-color);
+}
+
+.above-water .breath-icon {
+    color: var(--above-water-color);
+}
+
+.above-water #breath-level {
+    background-color: var(--above-water-color);
+}
+
+.above-water .progress-bar {
+    stroke: var(--above-water-color);
+}
+
+.underwater {
+    border-left: 4px solid var(--underwater-color) !important;
+}
+
+.underwater .breath-icon {
+    color: var(--underwater-color);
+}
+
+.underwater #breath-level {
+    background-color: var(--underwater-color);
+}
+
+.underwater .progress-bar {
+    stroke: var(--underwater-color);
+}
+
+.oxygen-mask {
+    border-left: 4px solid var(--mask-color) !important;
+}
+
+.oxygen-mask .breath-icon {
+    color: var(--mask-color);
+}
+
+.oxygen-mask #breath-level {
+    background-color: var(--mask-color);
+}
+
+.oxygen-mask .progress-bar {
+    stroke: var(--mask-color);
+}
+
+/* Animation and effects */
+@keyframes pulse {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+.warning-flash {
+    animation: flash 0.5s;
+}
+
+@keyframes flash {
+    0% {
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+    50% {
+        background-color: rgba(231, 76, 60, 0.3);
+    }
+    100% {
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+}
+
+/* Critical state */
+.critical .breath-value {
+    animation: pulse-text 1s infinite alternate;
+}
+
+@keyframes pulse-text {
+    0% {
+        opacity: 0.7;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Time warning states */
+.time-warning .status-text {
+    color: var(--warning-color);
+    font-weight: bold;
+    background-color: rgba(243, 156, 18, 0.2);
+}
+
+.time-critical .status-text {
+    color: var(--critical-color);
+    font-weight: bold;
+    background-color: rgba(231, 76, 60, 0.2);
+    animation: pulse-text 0.5s infinite alternate;
+}
+
+/* Critical animation for progress bar */
+.time-critical .progress-bar {
+    animation: critical-flash 0.5s infinite alternate;
+}
+
+@keyframes critical-flash {
+    0% {
+        stroke-opacity: 0.7;
+        stroke-width: 5;
+    }
+    100% {
+        stroke-opacity: 1;
+        stroke-width: 7;
+    }
+}
+
+/* Critical animation for icon */
+.time-critical .breath-icon {
+    animation: icon-critical 0.5s infinite alternate;
+}
+
+@keyframes icon-critical {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.7;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 1;
+    }
+}
+
+/* Deep breath animation */
+.deep-breath .progress-bar {
+    stroke: var(--good-color) !important;
+    transition: stroke 0.3s ease;
+}
+
+/* Responsive design */
+@media screen and (max-width: 1366px) {
+    #breath-container {
+        bottom: 15%;
+        width: 250px;
+    }
+    
+    .progress-circle {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .breath-text {
+        font-size: 16px;
+    }
+    
+    .breath-value {
+        font-size: 18px;
+    }
+}
+
+/* Animations for showing/hiding the container */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#breath-container.show {
+    animation: fadeIn 0.3s forwards;
+} 
